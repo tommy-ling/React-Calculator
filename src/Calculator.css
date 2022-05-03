@@ -1,0 +1,57 @@
+.Calculator-frame {
+  width: 350px;
+  height: 450px;
+  margin: 15vh auto 15vh auto;
+  background: black;
+  border: 2px solid #686464
+}
+
+.Calculator-calcs span {
+  color: #fca404;
+  font-family: 'calculator-font';
+  font-size: 1.5rem;
+}
+.Calculator-display span {
+  font-family: 'calculator-font';
+  font-size: 1.5rem;
+  color: white
+}
+
+.Calculator-calcs,
+.Calculator-display {
+  height: 5%;
+  padding: 5px 5px 0 5px;
+  text-align: end;
+}
+
+.Calculator-btns {
+  color: white;
+  font-size: 1rem;
+  padding: 5px;
+  height: 85.5%;
+  display: grid;
+  gap: 2px;
+  grid-template-columns: repeat(4 1fr);
+  grid-template-rows: repeat(5 1fr);
+  grid-template-areas:
+    "clear clear divide multiply"
+    "seven eight nine subtract"
+    "four five six addition"
+    "one two three delete"
+    "zero zero decimal equal";
+}
+.clear {background: #b03c3c;}
+.equal {background: #084464;}
+.nums {background: #504c4c;}
+.ops {background: #686464;}
+.delete {background: #ff741c}
+
+.Calculator-btns > *:hover {
+  border: 0.01px solid lightgray;
+  color: black
+}
+
+@font-face{
+  font-family:'calculator-font';
+  src: url('/src/Assets/digital-7\ \(italic\).ttf');
+ }
