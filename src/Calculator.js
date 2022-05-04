@@ -12,11 +12,11 @@ const calcs = {
 class Calculator extends Component {
   constructor(props) {
     super(props)
-    this.state = { display: "0", output: '' }
+    this.state = { display: '0', output: '' }
     this.handleClick = this.handleClick.bind(this)
   }
   handleClick = (e) => {
-    const display = this.state.display
+    const display = this.state.display.toString()
     const output = this.state.output
     if(e.target.className === 'clear') {
       this.setState({display: '0', output: ''})
@@ -26,7 +26,9 @@ class Calculator extends Component {
       } else {
         this.setState({display: display.slice(0, -1), output: output.slice(0,-1)})
       }
-    } else if(e.target.className === 'nums' && e.target.textContent !== '.') {
+    } 
+    
+    else if(e.target.className === 'nums' && e.target.textContent !== '.') {
       if(display[0] === '0' && !display.includes('.')) {
         this.setState({display: '' + e.target.textContent, output: output.slice(0,-1) + e.target.textContent})
       } else if(display.includes('+')||display.includes('-')||display.includes('x')||display.includes('/')) {
@@ -42,13 +44,28 @@ class Calculator extends Component {
       } else if(display.includes('+')||display.includes('-')||display.includes('x')||display.includes('/')) {
         this.setState({display: '0' + e.target.textContent, output: output + '0' + e.target.textContent})
       }
-    } else if(e.target.className === 'ops') {
+    } 
+    
+    else if(e.target.className === 'ops' && !(display.includes('+') || display.includes('-') || display.includes('x') || display.includes('/'))) {
       if(e.target.textContent === 'x') {
         this.setState({display: e.target.textContent, output: output.includes('=') ? display + '·': output + '·'})        
       } else {
         this.setState({display: e.target.textContent, output: output.includes('=') ? display + e.target.textContent: output + e.target.textContent})
       }
+    } else if(e.target.className === 'ops' && (display.includes('+') || display.includes('-') || display.includes('x') || display.includes('/'))) {
+      if(e.target.textContent !== '-' && e.target.textContent !== 'x') {
+        this.setState({display: e.target.textContent, output: output.slice(0,-1) + e.target.textContent})
+      } else if (e.target.textContent === 'x') {
+        this.setState({display: e.target.textContent, output: output.slice(0,-1) + '·'})        
+      } else {
+        if(display.includes('-')) {
+          this.setState({...this.state})
+        } else {
+          this.setState({display: "" + e.target.textContent, output: output + e.target.textContent})
+        }
+      }
     }
+
     else if(e.target.className === 'equal') {
       let numsToCalc = output.replace(/·/g, '*')
       function evalAlt(str) {
