@@ -16,7 +16,7 @@ class Calculator extends Component {
     this.handleClick = this.handleClick.bind(this)
   }
   handleClick = (e) => {
-    const display = this.state.display.toString()
+    const display = this.state.display
     const output = this.state.output
     if(e.target.className === 'clear') {
       this.setState({display: '0', output: ''})
@@ -48,18 +48,34 @@ class Calculator extends Component {
     
     else if(e.target.className === 'ops' && !(display.includes('+') || display.includes('-') || display.includes('x') || display.includes('/'))) {
       if(e.target.textContent === 'x') {
-        this.setState({display: e.target.textContent, output: output.includes('=') ? display + '·': output + '·'})        
+        this.setState({output: output.includes('=') ? display + '·': output + '·', display: e.target.textContent})        
       } else {
-        this.setState({display: e.target.textContent, output: output.includes('=') ? display + e.target.textContent: output + e.target.textContent})
+        this.setState({output: output.includes('=') ? display + e.target.textContent: output + e.target.textContent, display: e.target.textContent})
       }
-    } else if(e.target.className === 'ops' && (display.includes('+') || display.includes('-') || display.includes('x') || display.includes('/'))) {
+    } 
+    
+    else if(e.target.className === 'ops' && (display.includes('+') || display.includes('-') || display.includes('x') || display.includes('/'))) {
       if(e.target.textContent !== '-' && e.target.textContent !== 'x') {
-        this.setState({display: e.target.textContent, output: output.slice(0,-1) + e.target.textContent})
+        if(display.includes('-') && !display[1]) {
+          this.setState({display: e.target.textContent, output: output.slice(0,-2) + e.target.textContent})
+        } else if(display.includes('-') && display[1]) {
+          this.setState({display: e.target.textContent, output: display + e.target.textContent})
+        } else {
+          this.setState({display: e.target.textContent, output: output.slice(0,-1) + e.target.textContent})
+        }      
       } else if (e.target.textContent === 'x') {
-        this.setState({display: e.target.textContent, output: output.slice(0,-1) + '·'})        
+        if(display.includes('-') && !display[1]) {
+          this.setState({display: e.target.textContent, output: output.slice(0, -2) + '·'})
+        } else if(display.includes('-') && display[1]) {
+          this.setState({display: e.target.textContent, output: display + '·'})
+        } else {
+          this.setState({display: e.target.textContent, output: output.slice(0,-1) + '·'})
+        }
       } else {
-        if(display.includes('-')) {
+        if(display.includes('-') && !display[1]) {
           this.setState({...this.state})
+        } else if(display.includes('-') && display[1]) {
+          this.setState({display: e.target.textContent, output: display + e.target.textContent})
         } else {
           this.setState({display: "" + e.target.textContent, output: output + e.target.textContent})
         }
@@ -71,8 +87,22 @@ class Calculator extends Component {
       function evalAlt(str) {
         return new Function('return ' + str)();
       }
-      const result = evalAlt(numsToCalc)
-      this.setState({display: result, output: output + '='})
+      const result = evalAlt(numsToCalc).toString()
+
+      function toNonFloat(result) {
+        let nonFloat = result
+        if(result.includes('000000')) {
+          return nonFloat = result.slice(0, result.indexOf('000000'))
+        } else if (result.includes('999999')) {
+          nonFloat = result.slice(0, result.indexOf('999999'))
+          let lastDit = parseInt(nonFloat[nonFloat.length -1]) + 1
+          return nonFloat.slice(0, -1) + lastDit.toString()
+        } else {
+          return nonFloat
+        }
+      }
+      const nonFloatResult = toNonFloat(result)
+      this.setState({display: nonFloatResult, output: output + '='})
     }
   }
   
