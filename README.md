@@ -2,8 +2,17 @@
 Run 'npm start' to start
 
 ![Alt text](gif1.gif)
+
+/
+
 ![Alt text](gif2.gif)
+
+/
+
 ![Alt text](gif3.gif)
+
+/
+
 ![Alt text](gif4.gif)
 
 # Getting Started with Create React App
