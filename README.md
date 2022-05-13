@@ -1,4 +1,4 @@
-#Getting started
+# Getting started
 Run 'npm start' to start
 
 ![Alt text](gif1.gif)
